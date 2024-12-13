@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.UUID;
 
 import br.com.louzeiroheitor.phone_book.models.Phones;
+import jakarta.annotation.PostConstruct;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class PhoneController {
 
     private List<Phones> phones = new ArrayList<>();
+    
+    @PostConstruct
+    public void init(){
+        phones.add(new Phones(UUID.randomUUID(), "John Doe", "123-456-7890"));
+        phones.add(new Phones(UUID.randomUUID(), "Jane Smith", "987-654-3210"));
+        phones.add(new Phones(UUID.randomUUID(), "Peter Jones", "111-222-3333"));
+        phones.add(new Phones(UUID.randomUUID(), "Maria Oliveira", "444-555-6666"));
+    }
 
     @GetMapping("/")
     public String phone(Model model) {

@@ -11,6 +11,12 @@
         public Phones() {
         }
 
+        public Phones(UUID id, String name, String phone) {
+            this.id = id;
+            this.name = name;
+            this.phone = phone;
+        }
+
         public UUID getId() {
             return id;
         }
