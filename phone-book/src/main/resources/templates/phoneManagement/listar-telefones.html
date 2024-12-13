@@ -11,7 +11,7 @@
     <ul>
         <li th:each="phone : ${phones}">
             <span th:text="${phone.name}"></span> - <span th:text="${phone.phone}"></span> 
-            <!-- <a th:href="@{/phoneManagement/{id}/editar-telefone(id=${phone.id})}">Edit</a> -->
+            <a th:href="@{/phoneManagement/editar-telefone(id=${phone.id})}">Editar</a>
             <form th:action="@{/phoneManagement/{id}/deletar-telefone(id=${phone.id})}" th:method="deletar">
                 <button type="submit">Excluir</button>
             </form>
