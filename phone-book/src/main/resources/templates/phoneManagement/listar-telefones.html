@@ -2,20 +2,93 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>List of Phones</title>
+    <style>
+            body {
+                font-family: sans-serif;
+                margin: 20px;
+            }
+            ul {
+                list-style-type: none;
+                padding: 0;
+            }
+            li {
+                border: 1px solid #ddd;
+                padding: 10px;
+                margin-bottom: 5px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            li a, li form {
+                display: inline-block;
+                margin-left: 5px;
+            }
+             form {
+                display: inline;
+            }
+
+            .error-message {
+                color: red;
+                font-weight: bold;
+            }
+            .button-add {
+                margin-bottom: 20px;
+            }
+            .pagination {
+                margin-top: 20px;
+                text-align: center;
+            }
+
+            .pagination a {
+                display: inline-block;
+                padding: 8px 12px;
+                margin: 0 5px;
+                border: 1px solid #ddd;
+                text-decoration: none;
+                color: #333;
+            }
+
+            .pagination a:hover {
+                background-color: #f0f0f0;
+            }
+
+            .pagination .active {
+                background-color: #007bff;
+                color: white;
+                border-color: #007bff;
+            }
+        </style>
 </head>
 <body>
     <h1>List of Phones</h1>
+
+    <a class="button-add" th:href="@{/phoneManagement/novo-telefone}">Add New Phone</a>
     <div th:if="${error}">
-        <p th:text="${error}" style="color:red;"></p>
+        <p th:text="${error}" class="error-message"></p>
+    </div>
+    <div th:if="${message}">
+       <p th:text="${message}"></p>
     </div>
     <ul>
-        <li th:each="phone : ${phones}">
-            <span th:text="${phone.name}"></span> - <span th:text="${phone.phone}"></span> 
-            <a th:href="@{/phoneManagement/editar-telefone(id=${phone.id})}">Editar</a>
-            <form th:action="@{/phoneManagement/{id}/deletar-telefone(id=${phone.id})}" th:method="deletar">
-                <button type="submit">Excluir</button>
-            </form>
+        <li th:each="phone : ${phonePage.content}">
+            <span><span th:text="${phone.name}"></span> - <span th:text="${phone.phone}"></span></span>
+            <div>
+                <a th:href="@{/phoneManagement/editar-telefone(id=${phone.id})}">Edit</a>
+                <form th:action="@{/phoneManagement/{id}/deletar-telefone(id=${phone.id})}" th:method="post">
+                    <button type="submit">Delete</button>
+                </form>
+           </div>
         </li>
     </ul>
+    <div class="pagination" th:if="${phonePage.totalPages > 1}">
+        <a th:if="${phonePage.hasPrevious()}" th:href="@{/phoneManagement/listar-telefones(page=${phonePage.number - 1})}">Previous</a>
+
+        <span th:each="i : ${#numbers.sequence(0, phonePage.totalPages - 1)}">
+           <a th:href="@{/phoneManagement/listar-telefones(page=${i})}"
+           th:classappend="${i == phonePage.number} ? 'active' : ''" th:text="${i + 1}"></a>
+        </span>
+
+        <a th:if="${phonePage.hasNext()}" th:href="@{/phoneManagement/listar-telefones(page=${phonePage.number + 1})}">Next</a>
+   </div>
 </body>
 </html>
